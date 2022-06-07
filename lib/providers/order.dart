@@ -1,13 +1,13 @@
 import 'package:flutter/foundation.dart';
 import 'package:udemy_example/providers/cart.dart';
 
-class Order {
+class OrderModel {
   final String id;
   final double amount;
-  final List<CartItem> products;
+  final List<CartModel> products;
   final DateTime dateTime;
 
-  Order({
+  OrderModel({
     required this.id,
     required this.amount,
     required this.products,
@@ -16,16 +16,16 @@ class Order {
 }
 
 class Orders with ChangeNotifier {
-  final List<Order> _orders = [];
+  final List<OrderModel> _orders = [];
 
-  List<Order> get orders {
+  List<OrderModel> get orders {
     return [..._orders];
   }
 
-  void addOrder(List<CartItem> cartProducts, double total) {
+  void addOrder(List<CartModel> cartProducts, double total) {
     _orders.insert(
       0,
-      Order(
+      OrderModel(
         id: DateTime.now().toString(),
         amount: total,
         products: cartProducts,
