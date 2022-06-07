@@ -65,14 +65,14 @@ class CartScreen extends StatelessWidget {
             child: ListView.builder(
               itemCount: cart.items.length,
               itemBuilder: (ctx, i) {
-                final carts = cart.items.values.toList()[i];
+                final carts = cart.items;
                 return carts != null
                     ? CardItem(
-                        carts.id,
+                        carts.values.toList()[i].id,
                         cart.items.keys.toList()[i],
-                        carts.title,
-                        carts.price,
-                        carts.quantity,
+                        carts.values.toList()[i].title,
+                        carts.values.toList()[i].price,
+                        carts.values.toList()[i].quantity,
                       )
                     : const Center(child: CircularProgressIndicator());
               },
