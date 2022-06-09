@@ -36,10 +36,9 @@ class CartScreen extends StatelessWidget {
                     label: Text(
                       '\$${cart.totalAmount.toStringAsFixed(2)}',
                       style: TextStyle(
-                          color: Theme.of(context)
-                              .primaryTextTheme
-                              .subtitle1
-                              ?.color),
+                        color:
+                            Theme.of(context).primaryTextTheme.subtitle1?.color,
+                      ),
                     ),
                     backgroundColor: Theme.of(context).primaryColor,
                   ),
@@ -66,7 +65,7 @@ class CartScreen extends StatelessWidget {
               itemCount: cart.items.length,
               itemBuilder: (ctx, i) {
                 final carts = cart.items;
-                return carts != null
+                return carts.isNotEmpty
                     ? CartItem(
                         carts.values.toList()[i].id,
                         cart.items.keys.toList()[i],

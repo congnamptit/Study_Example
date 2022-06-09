@@ -7,6 +7,7 @@ import 'package:udemy_example/screes/cart_screen.dart';
 import 'package:udemy_example/screes/order_screen.dart';
 import 'package:udemy_example/screes/product_detail_page.dart';
 import 'package:udemy_example/screes/products_overview_screen.dart';
+import 'package:udemy_example/screes/user_product_screen.dart';
 
 void main() {
   runApp(const MyApp());
@@ -43,6 +44,7 @@ class MyApp extends StatelessWidget {
               const ProductsDetailPage(),
           CartScreen.routerName: (context) => const CartScreen(),
           OrderScreen.routerName: (context) => const OrderScreen(),
+          UserProductScreen.routerName: (context) => const UserProductScreen(),
         },
       ),
     );

@@ -38,9 +38,7 @@ class _ProductsOverviewScreenState extends State<ProductsOverviewScreen> {
                 }
               });
             },
-            icon: const Icon(
-              Icons.more_vert,
-            ),
+            icon: const Icon(Icons.more_vert),
             itemBuilder: (_) => const [
               PopupMenuItem(
                 child: Text('Only Favorites'),
@@ -55,9 +53,7 @@ class _ProductsOverviewScreenState extends State<ProductsOverviewScreen> {
           Consumer<Cart>(
             builder: (_, cart, child) => Badge(
               child: IconButton(
-                icon: const Icon(
-                  Icons.shopping_cart,
-                ),
+                icon: const Icon(Icons.shopping_cart),
                 onPressed: () {
                   Navigator.of(context).pushNamed(CartScreen.routerName);
                 },
