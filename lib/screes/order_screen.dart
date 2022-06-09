@@ -19,10 +19,11 @@ class OrderScreen extends StatelessWidget {
       ),
       drawer: const AppDrawer(),
       body: ListView.builder(
-          itemCount: orderData.orders.length,
-          itemBuilder: (ctx, i) {
-            return OrderItem(orderData.orders[i]);
-          }),
+        itemCount: orderData.orders.length,
+        itemBuilder: (ctx, i) {
+          return OrderItem(orderData.orders[i]);
+        },
+      ),
     );
   }
 }
