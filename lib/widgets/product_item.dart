@@ -23,7 +23,7 @@ class ProductItem extends StatelessWidget {
             );
           },
           child: Image.network(
-            product.imageUrl,
+            product.imageUrl!,
             fit: BoxFit.cover,
           ),
         ),
@@ -41,13 +41,13 @@ class ProductItem extends StatelessWidget {
             ),
           ),
           title: Text(
-            product.title,
+            product.title!,
             textAlign: TextAlign.center,
             style: const TextStyle(color: Colors.black),
           ),
           trailing: IconButton(
             onPressed: () {
-              cart.addItem(product.id, product.price, product.title);
+              cart.addItem(product.id!, product.price!, product.title!);
             },
             icon: const Icon(Icons.shopping_cart),
             color: Theme.of(context).colorScheme.secondary,

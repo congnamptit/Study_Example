@@ -10,11 +10,11 @@ class Product with ChangeNotifier {
     this.isFavorite = false,
   });
 
-  final String id;
-  final String title;
-  final String description;
-  final double price;
-  final String imageUrl;
+  final String? id;
+  final String? title;
+  final String? description;
+  final double? price;
+  final String? imageUrl;
   bool isFavorite;
 
   void toggleFavoriteStatus() {
