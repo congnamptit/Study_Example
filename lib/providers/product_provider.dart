@@ -1,5 +1,8 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:udemy_example/models/product.dart';
+import 'package:http/http.dart' as http;
 
 class ProductProvider with ChangeNotifier {
   final List<Product> _items = [
@@ -97,7 +100,17 @@ class ProductProvider with ChangeNotifier {
     return _items.firstWhere((element) => element.id == id);
   }
 
-  void addProduct(Product product) {
+  void addProduct(Product product) async {
+    var url = Uri.parse(
+        'https://shopping-ae75d-default-rtdb.firebaseio.com/products.json');
+    var response = await http.post(url,
+        body: json.encode({
+          'title': product.title,
+          'description': product.description,
+          'imageUrl': product.imageUrl,
+          'price': product.price,
+          'isFavorite': product.isFavorite,
+        }));
     final newProduct = Product(
       id: DateTime.now().toString(),
       title: product.title,
@@ -114,8 +127,6 @@ class ProductProvider with ChangeNotifier {
     if (productIndex >= 0) {
       _items[productIndex] = newProduct;
       notifyListeners();
-    } else {
-      print('==============update Product');
     }
   }
 

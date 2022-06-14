@@ -1,0 +1,76 @@
+{
+  "project_info": {
+    "project_number": "326569412384",
+    "project_id": "shopping-ae75d",
+    "storage_bucket": "shopping-ae75d.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:326569412384:android:7252b671071dc51d7d3945",
+        "android_client_info": {
+          "package_name": "com.example.udemy_example"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "326569412384-4bhle61fogjc0vq2rpm1n94qcur5uokf.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBjLajoTrRNzKPdPri-ePJabOZZ9vJAiic"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "326569412384-4bhle61fogjc0vq2rpm1n94qcur5uokf.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:326569412384:android:410647935d3ba5107d3945",
+        "android_client_info": {
+          "package_name": "com.santosenoque.untitled"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "326569412384-aqf302lo6ijfg3bjio7aifvdbgubov3c.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.santosenoque.untitled",
+            "certificate_hash": "762a766965d38b9092568849b2d32b768c415488"
+          }
+        },
+        {
+          "client_id": "326569412384-4bhle61fogjc0vq2rpm1n94qcur5uokf.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBjLajoTrRNzKPdPri-ePJabOZZ9vJAiic"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "326569412384-4bhle61fogjc0vq2rpm1n94qcur5uokf.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
