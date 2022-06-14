@@ -74,12 +74,15 @@ class _EditProductScreenState extends State<EditProductScreen> {
 
   void _updateImgUrl() {
     if (!_imgUrlFocusNode.hasFocus) {
-      if (_imgUrlController.text.isEmpty ||
+      if (_imgUrlController.text.isEmpty
+          ||
           _imgUrlController.text.startsWith('https') &&
-              !_imgUrlController.text.startsWith('https') ||
+              !_imgUrlController.text.startsWith('https')
+          ||
           _imgUrlController.text.endsWith('png') &&
               !_imgUrlController.text.endsWith('jpg') &&
-              !_imgUrlController.text.endsWith('jpeg')) {
+              !_imgUrlController.text.endsWith('jpeg')
+      ) {
         return;
       }
       setState(() {});
