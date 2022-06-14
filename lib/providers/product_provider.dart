@@ -105,10 +105,10 @@ class ProductProvider with ChangeNotifier {
       price: product.price,
       imageUrl: product.imageUrl,
     );
-   _items.add(newProduct);
+    _items.add(newProduct);
     notifyListeners();
   }
-  
+
   void updateProduct(String id, Product newProduct) {
     final productIndex = _items.indexWhere((prod) => prod.id == id);
     if (productIndex >= 0) {
@@ -117,5 +117,10 @@ class ProductProvider with ChangeNotifier {
     } else {
       print('==============update Product');
     }
+  }
+
+  void removeProduct(String id) {
+    _items.removeWhere((prod) => prod.id == id);
+    notifyListeners();
   }
 }
