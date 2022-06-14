@@ -74,31 +74,58 @@ class _EditProductScreenState extends State<EditProductScreen> {
 
   void _updateImgUrl() {
     if (!_imgUrlFocusNode.hasFocus) {
-      if (_imgUrlController.text.isEmpty
-          ||
+      if (_imgUrlController.text.isEmpty ||
           _imgUrlController.text.startsWith('https') &&
-              !_imgUrlController.text.startsWith('https')
-          ||
+              !_imgUrlController.text.startsWith('https') ||
           _imgUrlController.text.endsWith('png') &&
               !_imgUrlController.text.endsWith('jpg') &&
-              !_imgUrlController.text.endsWith('jpeg')
-      ) {
+              !_imgUrlController.text.endsWith('jpeg')) {
         return;
       }
       setState(() {});
     }
   }
 
-  void _saveForm() {
+  Future<void> _saveForm() async {
     final isValid = _form.currentState!.validate();
     if (!isValid) return;
     _form.currentState?.save();
+
+    setState(() {
+    });
+
     if (_editProduct.id != null) {
       Provider.of<ProductProvider>(context, listen: false)
           .updateProduct(_editProduct.id!, _editProduct);
+
+      setState(() {
+      });
+      Navigator.of(context).pop();
     } else {
-      Provider.of<ProductProvider>(context, listen: false)
-          .addProduct(_editProduct);
+      await Provider.of<ProductProvider>(context, listen: false)
+          .addProduct(_editProduct)
+          .catchError((onError) {
+        showDialog(
+          context: context,
+          builder: (context) => AlertDialog(
+            title: const Text('an error occurred'),
+            content: Text(
+              onError.toString(),
+            ),
+            actions: [
+              ElevatedButton(
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  },
+                  child: const Text('Okey'))
+            ],
+          ),
+        );
+      }).then((_) {
+        setState(() {
+        });
+        Navigator.of(context).pop();
+      });
     }
 
     Navigator.of(context).pop();
@@ -242,11 +269,11 @@ class _EditProductScreenState extends State<EditProductScreen> {
                             !value.startsWith('https')) {
                           return 'please enter a valid URL';
                         }
-                        if (!value.endsWith('.png') &&
-                            !value.endsWith('.jpg') &&
-                            !value.endsWith('.jpeg')) {
-                          return 'Please enter a valid image URL';
-                        }
+                        // if (!value.endsWith('.png') &&
+                        //     !value.endsWith('.jpg') &&
+                        //     !value.endsWith('.jpeg')) {
+                        //   return 'Please enter a valid image URL';
+                        // }
                         return null;
                       },
                       onSaved: (value) {
