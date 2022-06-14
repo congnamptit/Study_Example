@@ -26,7 +26,7 @@ class _EditProductScreenState extends State<EditProductScreen> {
     imageUrl: '',
   );
 
-   var _initValues = {
+  var _initValues = {
     'title': '',
     'description': '',
     'price': '',
@@ -91,7 +91,8 @@ class _EditProductScreenState extends State<EditProductScreen> {
     if (!isValid) return;
     _form.currentState?.save();
     if (_editProduct.id != null) {
-
+      Provider.of<ProductProvider>(context, listen: false)
+          .updateProduct(_editProduct.id!, _editProduct);
     } else {
       Provider.of<ProductProvider>(context, listen: false)
           .addProduct(_editProduct);
@@ -109,7 +110,7 @@ class _EditProductScreenState extends State<EditProductScreen> {
           IconButton(
             onPressed: _saveForm,
             icon: const Icon(Icons.save),
-          )
+          ),
         ],
       ),
       body: Padding(
@@ -133,11 +134,12 @@ class _EditProductScreenState extends State<EditProductScreen> {
                 },
                 onSaved: (value) {
                   _editProduct = Product(
-                    id: null,
+                    id: _editProduct.id,
                     price: _editProduct.price,
                     imageUrl: _editProduct.imageUrl,
                     title: value,
                     description: _editProduct.description,
+                    isFavorite: _editProduct.isFavorite,
                   );
                 },
               ),
@@ -164,11 +166,12 @@ class _EditProductScreenState extends State<EditProductScreen> {
                 },
                 onSaved: (value) {
                   _editProduct = Product(
-                    id: null,
+                    id: _editProduct.id,
                     price: double.parse(value!),
                     imageUrl: _editProduct.imageUrl,
                     title: _editProduct.title,
                     description: _editProduct.description,
+                    isFavorite: _editProduct.isFavorite,
                   );
                 },
               ),
@@ -189,11 +192,12 @@ class _EditProductScreenState extends State<EditProductScreen> {
                 },
                 onSaved: (value) {
                   _editProduct = Product(
-                    id: null,
+                    id: _editProduct.id,
                     price: _editProduct.price,
                     imageUrl: _editProduct.imageUrl,
                     title: _editProduct.title,
                     description: value,
+                    isFavorite: _editProduct.isFavorite,
                   );
                 },
               ),
@@ -244,11 +248,12 @@ class _EditProductScreenState extends State<EditProductScreen> {
                       },
                       onSaved: (value) {
                         _editProduct = Product(
-                          id: null,
+                          id: _editProduct.id,
                           price: _editProduct.price,
                           imageUrl: value,
                           title: _editProduct.title,
                           description: _editProduct.description,
+                          isFavorite: _editProduct.isFavorite,
                         );
                       },
                     ),
