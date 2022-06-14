@@ -16,7 +16,7 @@ class ProductsDetailPage extends StatelessWidget {
     ).findById(productId);
     return Scaffold(
       appBar: AppBar(
-        title: Text(loadedProduct.title),
+        title: Text(loadedProduct.title!),
       ),
       body: Column(
         children: [
@@ -24,7 +24,7 @@ class ProductsDetailPage extends StatelessWidget {
             height: 300,
             width: double.infinity,
             child: Image.network(
-              loadedProduct.imageUrl,
+              loadedProduct.imageUrl!,
               fit: BoxFit.cover,
             ),
           ),
@@ -42,7 +42,7 @@ class ProductsDetailPage extends StatelessWidget {
             width: double.infinity,
             padding: const EdgeInsets.symmetric(horizontal: 10),
             child: Text(
-              loadedProduct.description,
+              loadedProduct.description!,
               textAlign: TextAlign.center,
               softWrap: true,
             ),
