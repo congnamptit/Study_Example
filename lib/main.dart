@@ -1,3 +1,4 @@
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:udemy_example/providers/cart.dart';
@@ -10,7 +11,9 @@ import 'package:udemy_example/screes/product_detail_page.dart';
 import 'package:udemy_example/screes/products_overview_screen.dart';
 import 'package:udemy_example/screes/user_product_screen.dart';
 
-void main() {
+void main() async{
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp();
   runApp(const MyApp());
 }
 

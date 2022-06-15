@@ -1,76 +1,19 @@
 import 'dart:convert';
 
+import 'package:dio/dio.dart';
+import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:udemy_example/models/product.dart';
 import 'package:http/http.dart' as http;
+import 'package:udemy_example/widgets/exception_handle.dart';
 
 class ProductProvider with ChangeNotifier {
-  List<Product> _items = [
-    // Product(
-    //   id: 'p1',
-    //   title: 'Red Shirt',
-    //   description: 'A red shirt - it is pretty red!',
-    //   price: 29.99,
-    //   imageUrl:
-    //       'https://cdn.pixabay.com/photo/2016/10/02/22/17/red-t-shirt-1710578_1280.jpg',
-    // ),
-    // Product(
-    //   id: 'p2',
-    //   title: 'Trousers',
-    //   description: 'A nice pair of trousers.',
-    //   price: 59.99,
-    //   imageUrl:
-    //       'https://upload.wikimedia.org/wikipedia/commons/thumb/e/e8/Trousers%2C_dress_%28AM_1960.022-8%29.jpg/512px-Trousers%2C_dress_%28AM_1960.022-8%29.jpg',
-    // ),
-    // Product(
-    //   id: 'p3',
-    //   title: 'Yellow Scarf',
-    //   description: 'Warm and cozy - exactly what you need for the winter.',
-    //   price: 19.99,
-    //   imageUrl:
-    //       'https://live.staticflickr.com/4043/4438260868_cc79b3369d_z.jpg',
-    // ),
-    // Product(
-    //   id: 'p4',
-    //   title: 'A Pan',
-    //   description: 'Prepare any meal you want.',
-    //   price: 49.99,
-    //   imageUrl:
-    //       'https://upload.wikimedia.org/wikipedia/commons/thumb/1/14/Cast-Iron-Pan.jpg/1024px-Cast-Iron-Pan.jpg',
-    // ),
-    // Product(
-    //   id: 'p5',
-    //   title: 'Red Shirt 2',
-    //   description: 'A red shirt - it is pretty red!',
-    //   price: 19.99,
-    //   imageUrl:
-    //       'https://cdn.pixabay.com/photo/2016/10/02/22/17/red-t-shirt-1710578_1280.jpg',
-    // ),
-    // Product(
-    //   id: 'p6',
-    //   title: 'Trousers 2',
-    //   description: 'A nice pair of trousers.',
-    //   price: 49.99,
-    //   imageUrl:
-    //       'https://upload.wikimedia.org/wikipedia/commons/thumb/e/e8/Trousers%2C_dress_%28AM_1960.022-8%29.jpg/512px-Trousers%2C_dress_%28AM_1960.022-8%29.jpg',
-    // ),
-    // Product(
-    //   id: 'p7',
-    //   title: 'Yellow Scarf 2',
-    //   description: 'Warm and cozy - exactly what you need for the winter.',
-    //   price: 29.99,
-    //   imageUrl:
-    //       'https://live.staticflickr.com/4043/4438260868_cc79b3369d_z.jpg',
-    // ),
-    // Product(
-    //   id: 'p8',
-    //   title: 'A Panned',
-    //   description: 'Prepare any meal you want.',
-    //   price: 59.99,
-    //   imageUrl:
-    //       'https://upload.wikimedia.org/wikipedia/commons/thumb/1/14/Cast-Iron-Pan.jpg/1024px-Cast-Iron-Pan.jpg',
-    // ),
-  ];
+  late Dio _dio;
+
+  FirebaseDatabase database = FirebaseDatabase.instance;
+  DatabaseReference reference = FirebaseDatabase.instance.ref('products');
+
+  List<Product> _items = [];
 
   List<Product> get items {
     return [..._items];
@@ -81,25 +24,25 @@ class ProductProvider with ChangeNotifier {
   }
 
   Product findById(String id) {
-    return _items.firstWhere((element) => element.id == id);
+    return _items.firstWhere((e) => e.id.toString() == id);
   }
 
   Future<void> fetchAndSetProducts() async {
-    var url = Uri.parse(
-        'https://shopping-ae75d-default-rtdb.firebaseio.com/products.json');
+    var url = Uri.parse('https://shopping-ae75d-default-rtdb.firebaseio.com/products.json');
     try {
-      List<Product> loadedProducts = [];
       final response = await http.get(url);
-      final extractedData = jsonDecode(response.body) as Map<String, dynamic>;
-
-      extractedData.forEach((prodId, prodData) {
+      final extractedData = jsonDecode(response.body) ?? <String, dynamic>{};
+      List<Product> loadedProducts = [];
+      print(extractedData);
+      extractedData.forEach((prodId, productData) {
         loadedProducts.add(
           Product(
-            id: prodId,
-            title: prodData['title'],
-            description: prodData['description'],
-            price: prodData['price'],
-            imageUrl: prodData['imageUrl'],
+            id: productData,
+            title: productData['title'].toString(),
+            description: productData['description'].toString(),
+            price: double.tryParse(productData['price']),
+            isFavorite: productData['isFavorite'],
+            imageUrl: productData['imageUrl'].toString(),
           ),
         );
       });
@@ -140,38 +83,40 @@ class ProductProvider with ChangeNotifier {
   }
 
   Future<void> updateProduct(String id, Product newProduct) async {
-    final productIndex = _items.indexWhere((prod) => prod.id == id);
+    final productIndex = _items.indexWhere((prod) => prod.id.toString() == id);
     if (productIndex >= 0) {
       var url = Uri.parse(
-          'https://shopping-ae75d-default-rtdb.firebaseio.com/products.json');
-      await http.patch(url,
-          body: jsonEncode({
-            'title': newProduct.title,
-            'description': newProduct.description,
-            'imageUrl': newProduct.imageUrl,
-            'price': newProduct.price,
-          }));
+          'https://shopping-ae75d-default-rtdb.firebaseio.com/products/$id.json');
+      await http.patch(
+        url,
+        body: json.encode({
+          'title': newProduct.title,
+          'description': newProduct.description,
+          'imageUrl': newProduct.imageUrl,
+          'price': newProduct.price,
+        }),
+      );
       _items[productIndex] = newProduct;
       notifyListeners();
     }
   }
 
-  void removeProduct(String id) async{
+  Future<void> deleteProduct(String id) async {
     var url = Uri.parse(
         'https://shopping-ae75d-default-rtdb.firebaseio.com/products/$id.json');
-    final existingProductIndex = _items.indexWhere((prod) => prod.id == id);
+    final existingProductIndex =
+        _items.indexWhere((prod) => prod.id.toString() == id);
     Product? existingProduct = _items[existingProductIndex];
 
-    await http.delete(url).then((_) {
-      if (_.statusCode >= 400) {
-        throw Exception();
-      }
-      existingProduct = null;
-    }).catchError((_) {
-      _items.insert(existingProductIndex, existingProduct!);
-      notifyListeners();
-    });
     _items.removeAt(existingProductIndex);
     notifyListeners();
+
+    final response = await http.delete(url);
+    if (response.statusCode >= 400) {
+      _items.insert(existingProductIndex, existingProduct);
+      notifyListeners();
+      throw ExceptionHandle('Could not delete Product.');
+    }
+    existingProduct = null;
   }
 }
