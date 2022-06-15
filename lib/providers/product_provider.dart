@@ -31,16 +31,16 @@ class ProductProvider with ChangeNotifier {
     var url = Uri.parse('https://shopping-ae75d-default-rtdb.firebaseio.com/products.json');
     try {
       final response = await http.get(url);
-      final extractedData = jsonDecode(response.body) ?? <String, dynamic>{};
+      final extractedData = jsonDecode(response.body) as Map<String, dynamic>;
       List<Product> loadedProducts = [];
       print(extractedData);
       extractedData.forEach((prodId, productData) {
         loadedProducts.add(
           Product(
-            id: productData,
+            id: prodId,
             title: productData['title'].toString(),
             description: productData['description'].toString(),
-            price: double.tryParse(productData['price']),
+            price: productData['price'],
             isFavorite: productData['isFavorite'],
             imageUrl: productData['imageUrl'].toString(),
           ),
