@@ -10,6 +10,7 @@ class UserProductItem extends StatelessWidget {
     this.imgUrl,
     this.id,
   }) : super(key: key);
+
   final String? title;
   final String? id;
   final String? imgUrl;
@@ -36,9 +37,20 @@ class UserProductItem extends StatelessWidget {
               color: Theme.of(context).primaryColor,
             ),
             IconButton(
-              onPressed: () {
-                Provider.of<ProductProvider>(context, listen: false)
-                    .removeProduct(id!);
+              onPressed: () async {
+                try {
+                  await Provider.of<ProductProvider>(context, listen: false)
+                      .deleteProduct(id!);
+                } catch (error) {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(
+                      content: Text(
+                        'Deleting failed',
+                        textAlign: TextAlign.center,
+                      ),
+                    ),
+                  );
+                }
               },
               icon: const Icon(Icons.delete),
               color: Theme.of(context).errorColor,

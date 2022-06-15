@@ -10,7 +10,7 @@ class Product with ChangeNotifier {
     this.isFavorite = false,
   });
 
-  final String? id;
+  final int? id;
   final String? title;
   final String? description;
   final double? price;

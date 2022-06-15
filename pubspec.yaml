@@ -20,6 +20,12 @@ dependencies:
 
   # For http
   http: ^0.13.4
+  dio: ^4.0.6
+
+  # For Firebase
+  firebase_database: ^9.0.15
+  firebase_storage: ^10.2.17
+  firebase_core: ^1.17.1
 
 dev_dependencies:
   flutter_test:
