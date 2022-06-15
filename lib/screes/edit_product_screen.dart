@@ -34,6 +34,7 @@ class _EditProductScreenState extends State<EditProductScreen> {
   };
 
   bool _isInit = true;
+  bool _isLoading = false;
 
   @override
   void initState() {
@@ -92,6 +93,7 @@ class _EditProductScreenState extends State<EditProductScreen> {
     _form.currentState?.save();
 
     setState(() {
+      _isLoading = true;
     });
 
     if (_editProduct.id != null) {
@@ -99,35 +101,35 @@ class _EditProductScreenState extends State<EditProductScreen> {
           .updateProduct(_editProduct.id!, _editProduct);
 
       setState(() {
+        _isLoading = false;
       });
       Navigator.of(context).pop();
     } else {
-      await Provider.of<ProductProvider>(context, listen: false)
-          .addProduct(_editProduct)
-          .catchError((onError) {
-        showDialog(
+      try {
+        await Provider.of<ProductProvider>(context, listen: false)
+            .addProduct(_editProduct);
+      } catch (error) {
+        await showDialog(
           context: context,
           builder: (context) => AlertDialog(
             title: const Text('an error occurred'),
-            content: Text(
-              onError.toString(),
-            ),
+            content: Text(error.toString()),
             actions: [
               ElevatedButton(
                   onPressed: () {
                     Navigator.of(context).pop();
                   },
-                  child: const Text('Okey'))
+                  child: const Text('Okay'))
             ],
           ),
         );
-      }).then((_) {
+      } finally {
         setState(() {
+          _isLoading = false;
         });
         Navigator.of(context).pop();
-      });
+      }
     }
-
     Navigator.of(context).pop();
   }
 
@@ -143,7 +145,11 @@ class _EditProductScreenState extends State<EditProductScreen> {
           ),
         ],
       ),
-      body: Padding(
+      body: _isLoading
+        ? const Center(
+        child: CircularProgressIndicator(),
+      )
+      : Padding(
         padding: const EdgeInsets.all(16.0),
         child: Form(
           key: _form,

@@ -72,12 +72,7 @@ class ProductProvider with ChangeNotifier {
     ),
   ];
 
-  // var _showFavoritesOnly = false;
-
   List<Product> get items {
-    // if (_showFavoritesOnly) {
-    //   return _items.where((element) => element.isFavorite).toList();
-    // }
     return [..._items];
   }
 
@@ -85,19 +80,19 @@ class ProductProvider with ChangeNotifier {
     return _items.where((element) => element.isFavorite).toList();
   }
 
-  //
-  // void showFavoritesOnly() {
-  //   _showFavoritesOnly = true;
-  //   notifyListeners();
-  // }
-  //
-  // void showAll() {
-  //   _showFavoritesOnly = false;
-  //   notifyListeners();
-  // }
-
   Product findById(String id) {
     return _items.firstWhere((element) => element.id == id);
+  }
+
+  Future<void> fetchAndSetProducts() async {
+    var url = Uri.parse(
+        'https://shopping-ae75d-default-rtdb.firebaseio.com/products.json');
+    try {
+      final response = await http.get(url);
+      print(response);
+    } catch (error) {
+      rethrow;
+    }
   }
 
   Future<void> addProduct(Product product) async {
@@ -125,7 +120,6 @@ class ProductProvider with ChangeNotifier {
       _items.add(newProduct);
       notifyListeners();
     } catch (error) {
-      print(error);
       rethrow;
     }
   }
