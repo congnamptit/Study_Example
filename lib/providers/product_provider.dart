@@ -1,14 +1,12 @@
 import 'dart:convert';
 
-import 'package:dio/dio.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
+import 'package:udemy_example/core/exceptions/exceptions.dart';
 import 'package:udemy_example/models/product.dart';
 import 'package:http/http.dart' as http;
-import 'package:udemy_example/widgets/exception_handle.dart';
 
 class ProductProvider with ChangeNotifier {
-  late Dio _dio;
 
   FirebaseDatabase database = FirebaseDatabase.instance;
   DatabaseReference reference = FirebaseDatabase.instance.ref('products');
@@ -115,7 +113,7 @@ class ProductProvider with ChangeNotifier {
     if (response.statusCode >= 400) {
       _items.insert(existingProductIndex, existingProduct);
       notifyListeners();
-      throw ExceptionHandle('Could not delete Product.');
+      throw const GenericException( message:'Could not delete Product.');
     }
     existingProduct = null;
   }
